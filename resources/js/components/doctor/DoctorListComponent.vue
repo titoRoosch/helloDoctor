@@ -89,13 +89,13 @@
             },
             delDoctor: function(doctor){
                 window.axios.delete('../api/doctors/delete/' + doctor.id).then((res) => {
-                    message = 'Doctor Sucessfully Deleted';
-                    type = 'success';
+                    var message = 'Doctor Sucessfully Deleted';
+                    var type = 'success';
                     this.showAlert(message, type);
                 }).catch(error => {
                     console.log(error);
-                    message = error.response.data.error;
-                    type = 'danger';
+                    var message = error.response.data.error;
+                    var type = 'danger';
                 });
                 this.doctors.pop(doctor);
             },

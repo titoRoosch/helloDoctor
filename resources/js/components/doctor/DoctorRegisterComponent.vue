@@ -94,8 +94,8 @@
                     }).then((res) => {
                         window.location.href = 'edit/'+res.data.id;
                     }).catch(error => {
-                        message = error.response.data.error;
-                        type = 'danger';
+                        var message = error.response.data.error;
+                        var type = 'danger';
                         this.showAlert(message, type);
                     });
                 }
