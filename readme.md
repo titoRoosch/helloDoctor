@@ -23,6 +23,9 @@ e suas especialidades
         composer install
 
     utilize o comando:
+        php artisan key:generate
+
+    utilize o comando:
         php artisan migrate
 
     para criar as tabelas e:
@@ -32,8 +35,3 @@ e suas especialidades
 
     saia da pasta bash e acesse o diretório principal do projeto, utitilize os comandos:
         npm install && npm run watch
-
-
-## Como usar
-
-## Biblioteca Postman
