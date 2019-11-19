@@ -81,25 +81,34 @@
         },
         methods: {
             sendForm: function (e) {
-
-                window.axios.post('../api/doctors/register', {
-                    'name': this.name,
-                    'crm': this.crm,
-                    'telephone': this.telephone,
-                    'specialties': this.specialtiesChk
-                }).then((res) => {
-  
-                    console.log('res', res);
-                    window.location.href = 'edit/'+res.data.id;
-                }).catch(error => {
-                    console.log(error.response.data.error)
-                });
+                if(this.specialtiesChk.length < 2){
+                    var message = "Minimum of two Specialties Required";
+                    var type = 'danger';
+                    this.showAlert(message, type);
+                }else{
+                    window.axios.post('../api/doctors/register', {
+                        'name': this.name,
+                        'crm': this.crm,
+                        'telephone': this.telephone,
+                        'specialties': this.specialtiesChk
+                    }).then((res) => {
+                        window.location.href = 'edit/'+res.data.id;
+                    }).catch(error => {
+                        message = error.response.data.error;
+                        type = 'danger';
+                        this.showAlert(message, type);
+                    });
+                }
                 e.preventDefault();
             },
             getSpecialties: function () {
                 window.axios.get('../specialties/api/list').then((res) => {
                     this.specialties = res.data;
                 })
+            },
+            showAlert: function(message, type){
+               $("#myAlert").html("<div class='alert alert-"+type+" alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> "+message+"</div>");
+               $("#myAlert").css("display", "");
             },
         }
     }

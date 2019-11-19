@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group mb-0">
                             <div class="col-xs-5">
-                                <button class="btn btn-outline-primary float-right" type="submit">Register</button>
+                                <button class="btn btn-outline-primary float-right" type="submit">Save</button>
                             </div>
                         </div>
                     </div>
@@ -55,10 +55,14 @@
                 window.axios.put('../../api/specialties/update/'+this.specialtyId, {
                     'name': this.name,
                 }).then((res) => {
-  
-                    console.log('res', res);
+                    var message = 'Specialty Sucessfully Updated';
+                    var type = 'success';
+                    this.showAlert(message, type);
                 }).catch(error => {
-                    console.log(error.response.data.error);
+                    console.log(error);
+                    var message = "Could Not Update the Specialty. Check the Form Data";
+                    var type = 'danger';
+                    this.showAlert(message, type);
                 });
                 e.preventDefault();
             },
@@ -66,6 +70,10 @@
                 window.axios.get('../../api/specialties/details/'+this.specialtyId).then((res) => {
                     this.name = res.data.name;
                 })
+            },
+            showAlert: function(message, type){
+                $("#myAlert").html("<div class='alert alert-"+type+" alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> "+message+"</div>");
+                $("#myAlert").css("display", "");
             }
         }
     }

@@ -48,7 +48,7 @@ class DoctorController extends Controller
             'name'              => 'required|string', 
         ]);
         if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
+            return response()->json(['error'=>$validator->errors()], 405);            
         }
 
         return $this->getDoctorByNameTrait($request);
@@ -76,7 +76,7 @@ class DoctorController extends Controller
             'specialties'       => 'required|array',
         ]);
         if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
+            return response()->json($validator->errors(), 405);            
         }
 
         $validatorSecond = Validator::make($request->specialties, [ 
@@ -84,7 +84,7 @@ class DoctorController extends Controller
         ]);
 
         if ($validatorSecond->fails()) { 
-            return response()->json(['error'=>$validatorSecond->errors()], 401);            
+            return response()->json(['error'=>$validatorSecond->errors()], 405);            
         }
 
         return $this->insertDoctorTrait($request);
@@ -113,7 +113,7 @@ class DoctorController extends Controller
         ]);
 
         if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
+            return response()->json(['error'=>$validator->errors()], 405);            
         }
 
         return $this->updateDoctorTrait($request, $doctor_id);

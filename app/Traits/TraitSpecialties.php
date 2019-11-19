@@ -65,6 +65,7 @@ trait TraitSpecialties
                 'notFound' => $notFoundSpecialty,
                 'message' => "Minimum of two specialties required"
             ];
+            return json_encode($ret);
         }
         foreach($specialties as $specialty){
             if(!Specialties::where([

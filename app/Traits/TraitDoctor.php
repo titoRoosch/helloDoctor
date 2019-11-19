@@ -42,7 +42,7 @@ trait TraitDoctor
         ]);
 
         if($doctor->exists()){
-            return 'Crm já cadastrado';
+            return response()->json(['error'=>'Crm alredy used'], 405);
         }
         
         return $this->registerDoctor($doctorReq);
@@ -62,7 +62,7 @@ trait TraitDoctor
         if(!$valSpecialties->validate){
             return response()->json([
                 'error'=> $valSpecialties->message,
-                'especialidades' => $valSpecialties->notFound,
+                'specialties' => $valSpecialties->notFound,
             ], 404);  
         }
         try{
@@ -103,6 +103,13 @@ trait TraitDoctor
     
     public function updateDoctorTrait($doctorReq, $doctor_id)
     {
+        $valSpecialties = json_decode($this->validateSpecialtiesTrait($doctorReq->specialties));
+        if(!$valSpecialties->validate){
+            return response()->json([
+                'error'=> $valSpecialties->message,
+                'specialties' => $valSpecialties->notFound,
+            ], 404);  
+        }
         try{
             $doctor = Doctor::find($doctor_id);
             $doctor->name = $doctorReq->name;

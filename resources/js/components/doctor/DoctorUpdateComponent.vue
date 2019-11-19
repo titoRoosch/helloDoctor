@@ -40,7 +40,7 @@
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3 mb-3" v-for="specialty in specialties" v-bind:key="specialty.id">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox"  v-model="specialtiesChk" class="custom-control-input" :value="specialty" :id="specialty.name">
+                                <input type="checkbox"  v-model="specialtiesChk" class="custom-control-input" :value="specialty" :id="specialty.name" >
                                 <label class="custom-control-label" :for="specialty.name"> {{specialty.name}}</label>
                             </div>
                             </div>
@@ -81,23 +81,28 @@
             this.getSpecialties();
            
         },
-        created() {
-            this.getCheckedSpecialties();
-        },
         methods: {
             sendForm: function (e) {
-
-                window.axios.put('../../api/doctors/update/'+this.doctorId, {
-                    'name': this.name,
-                    'crm': this.crm,
-                    'telephone': this.telephone,
-                    'specialties': this.specialtiesChk
-                }).then((res) => {
-  
-                    console.log('res', res);
-                }).catch(error => {
-                    console.log(error.response.data.error)
-                });
+                if(this.specialtiesChk.length < 2){
+                    var message = "Minimum of two Specialties Required";
+                    var type = 'danger';
+                    this.showAlert(message, type);
+                }else{
+                    window.axios.put('../../api/doctors/update/'+this.doctorId, {
+                        'name': this.name,
+                        'crm': this.crm,
+                        'telephone': this.telephone,
+                        'specialties': this.specialtiesChk
+                    }).then((res) => {
+                        var message = 'Doctor Sucessfully Updated';
+                        var type = 'success';
+                        this.showAlert(message, type);
+                    }).catch(error => {
+                        var message = "Could Not Update the Doctor. Check the Form Data";
+                        var type = 'danger';
+                        this.showAlert(message, type);
+                    });
+                }
                 e.preventDefault();
             },
             getDoctorDetails: function () {
@@ -112,13 +117,14 @@
                 })
             },
             getSpecialties: function () {
-                
                 window.axios.get('../../specialties/api/list').then((res) => {
                     this.specialties = res.data;
                 })
             },
-            getCheckedSpecialties: function () {
-            }
+            showAlert: function(message, type){
+                $("#myAlert").html("<div class='alert alert-"+type+" alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> "+message+"</div>");
+                $("#myAlert").css("display", "");
+            },
         }
     }
 </script>

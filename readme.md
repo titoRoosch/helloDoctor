@@ -9,6 +9,10 @@ e suas especialidades
 
     Clone o projeto no seu repositório
 
+    Copie o arquivo .env.example na raiz do projeto para o arquivo .env
+
+    Faça o mesmo dentro da pasta docker
+
     utilize o comando:
         docker-compose up -d
     

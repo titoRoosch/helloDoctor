@@ -81,13 +81,22 @@
             },
             delSpecialty: function(specialty){
                 window.axios.delete('../api/specialties/delete/' + specialty.id).then((res) => {
-                    toastr.info("Produto deletado com sucesso");
-                 
+                    var message = 'Specialty Sucessfully Deleted';
+                    var type = 'success';
+                    this.showAlert(message, type);
+                }).catch(error => {
+                    var message = error.response.data.error;
+                    var type = 'danger';
+                    this.showAlert(message, type);
                 });
                 this.specialties.pop(specialty);
             },
             goToEdit: function(specialty){
                 window.location.href = 'edit/'+specialty.id;
+            },
+            showAlert: function(message, type){
+                $("#myAlert").html("<div class='alert alert-"+type+" alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> "+message+"</div>");
+                $("#myAlert").css("display", "");
             }
         }
     }

@@ -69,7 +69,6 @@
         },
         mounted() {
             this.getDoctors();
-
         },
         props: ['route'],
         methods: {
@@ -90,13 +89,22 @@
             },
             delDoctor: function(doctor){
                 window.axios.delete('../api/doctors/delete/' + doctor.id).then((res) => {
-                    toastr.info("Produto deletado com sucesso");
-                 
+                    message = 'Doctor Sucessfully Deleted';
+                    type = 'success';
+                    this.showAlert(message, type);
+                }).catch(error => {
+                    console.log(error);
+                    message = error.response.data.error;
+                    type = 'danger';
                 });
                 this.doctors.pop(doctor);
             },
             goToEdit: function(doctor){
                 window.location.href = 'edit/'+doctor.id;
+            },
+            showAlert: function(message, type){
+                $("#myAlert").html("<div class='alert alert-"+type+" alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> "+message+"</div>");
+                $("#myAlert").css("display", "");
             }
         }
     }

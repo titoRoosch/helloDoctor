@@ -1962,13 +1962,26 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     delDoctor: function delDoctor(doctor) {
+      var _this3 = this;
+
       window.axios["delete"]('../api/doctors/delete/' + doctor.id).then(function (res) {
-        toastr.info("Produto deletado com sucesso");
+        message = 'Doctor Sucessfully Deleted';
+        type = 'success';
+
+        _this3.showAlert(message, type);
+      })["catch"](function (error) {
+        console.log(error);
+        message = error.response.data.error;
+        type = 'danger';
       });
       this.doctors.pop(doctor);
     },
     goToEdit: function goToEdit(doctor) {
       window.location.href = 'edit/' + doctor.id;
+    },
+    showAlert: function showAlert(message, type) {
+      $("#myAlert").html("<div class='alert alert-" + type + " alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> " + message + "</div>");
+      $("#myAlert").css("display", "");
     }
   }
 });
@@ -2064,25 +2077,40 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     sendForm: function sendForm(e) {
-      window.axios.post('../api/doctors/register', {
-        'name': this.name,
-        'crm': this.crm,
-        'telephone': this.telephone,
-        'specialties': this.specialtiesChk
-      }).then(function (res) {
-        console.log('res', res);
-        window.location.href = 'edit/' + res.data.id;
-      })["catch"](function (error) {
-        console.log(error.response.data.error);
-      });
+      var _this = this;
+
+      if (this.specialtiesChk.length < 2) {
+        var message = "Minimum of two Specialties Required";
+        var type = 'danger';
+        this.showAlert(message, type);
+      } else {
+        window.axios.post('../api/doctors/register', {
+          'name': this.name,
+          'crm': this.crm,
+          'telephone': this.telephone,
+          'specialties': this.specialtiesChk
+        }).then(function (res) {
+          window.location.href = 'edit/' + res.data.id;
+        })["catch"](function (error) {
+          message = error.response.data.error;
+          type = 'danger';
+
+          _this.showAlert(message, type);
+        });
+      }
+
       e.preventDefault();
     },
     getSpecialties: function getSpecialties() {
-      var _this = this;
+      var _this2 = this;
 
       window.axios.get('../specialties/api/list').then(function (res) {
-        _this.specialties = res.data;
+        _this2.specialties = res.data;
       });
+    },
+    showAlert: function showAlert(message, type) {
+      $("#myAlert").html("<div class='alert alert-" + type + " alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> " + message + "</div>");
+      $("#myAlert").css("display", "");
     }
   }
 });
@@ -2179,45 +2207,60 @@ __webpack_require__.r(__webpack_exports__);
     this.getDoctorDetails();
     this.getSpecialties();
   },
-  created: function created() {
-    this.getCheckedSpecialties();
-  },
   methods: {
     sendForm: function sendForm(e) {
-      window.axios.put('../../api/doctors/update/' + this.doctorId, {
-        'name': this.name,
-        'crm': this.crm,
-        'telephone': this.telephone,
-        'specialties': this.specialtiesChk
-      }).then(function (res) {
-        console.log('res', res);
-      })["catch"](function (error) {
-        console.log(error.response.data.error);
-      });
+      var _this = this;
+
+      if (this.specialtiesChk.length < 2) {
+        var message = "Minimum of two Specialties Required";
+        var type = 'danger';
+        this.showAlert(message, type);
+      } else {
+        window.axios.put('../../api/doctors/update/' + this.doctorId, {
+          'name': this.name,
+          'crm': this.crm,
+          'telephone': this.telephone,
+          'specialties': this.specialtiesChk
+        }).then(function (res) {
+          var message = 'Doctor Sucessfully Updated';
+          var type = 'success';
+
+          _this.showAlert(message, type);
+        })["catch"](function (error) {
+          var message = "Could Not Update the Doctor. Check the Form Data";
+          var type = 'danger';
+
+          _this.showAlert(message, type);
+        });
+      }
+
       e.preventDefault();
     },
     getDoctorDetails: function getDoctorDetails() {
-      var _this = this;
+      var _this2 = this;
 
       window.axios.get('../../api/doctors/details/' + this.doctorId).then(function (res) {
-        _this.name = res.data.name;
-        _this.crm = res.data.crm;
-        _this.telephone = res.data.telephone;
-        _this.specialtiesDoc = res.data.specialties;
+        _this2.name = res.data.name;
+        _this2.crm = res.data.crm;
+        _this2.telephone = res.data.telephone;
+        _this2.specialtiesDoc = res.data.specialties;
 
         for (var i = 0; i < res.data.specialties.length; i++) {
-          _this.specialtiesChk.push(_this.specialtiesDoc[i].specialty);
+          _this2.specialtiesChk.push(_this2.specialtiesDoc[i].specialty);
         }
       });
     },
     getSpecialties: function getSpecialties() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.axios.get('../../specialties/api/list').then(function (res) {
-        _this2.specialties = res.data;
+        _this3.specialties = res.data;
       });
     },
-    getCheckedSpecialties: function getCheckedSpecialties() {}
+    showAlert: function showAlert(message, type) {
+      $("#myAlert").html("<div class='alert alert-" + type + " alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> " + message + "</div>");
+      $("#myAlert").css("display", "");
+    }
   }
 });
 
@@ -2313,13 +2356,27 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     delSpecialty: function delSpecialty(specialty) {
+      var _this3 = this;
+
       window.axios["delete"]('../api/specialties/delete/' + specialty.id).then(function (res) {
-        toastr.info("Produto deletado com sucesso");
+        var message = 'Specialty Sucessfully Deleted';
+        var type = 'success';
+
+        _this3.showAlert(message, type);
+      })["catch"](function (error) {
+        var message = error.response.data.error;
+        var type = 'danger';
+
+        _this3.showAlert(message, type);
       });
       this.specialties.pop(specialty);
     },
     goToEdit: function goToEdit(specialty) {
       window.location.href = 'edit/' + specialty.id;
+    },
+    showAlert: function showAlert(message, type) {
+      $("#myAlert").html("<div class='alert alert-" + type + " alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> " + message + "</div>");
+      $("#myAlert").css("display", "");
     }
   }
 });
@@ -2383,6 +2440,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     sendForm: function sendForm(e) {
+      var _this = this;
+
       window.axios.post('../api/specialties/register', {
         'name': this.name
       }).then(function (res) {
@@ -2390,8 +2449,16 @@ __webpack_require__.r(__webpack_exports__);
         console.log('res', res);
       })["catch"](function (error) {
         console.log(error.response.data.error);
+        var message = "Could Not Register the Specialty. Check the Form Data";
+        var type = 'danger';
+
+        _this.showAlert(message, type);
       });
       e.preventDefault();
+    },
+    showAlert: function showAlert(message, type) {
+      $("#myAlert").html("<div class='alert alert-" + type + " alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> " + message + "</div>");
+      $("#myAlert").css("display", "");
     }
   }
 });
@@ -2460,21 +2527,34 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     sendForm: function sendForm(e) {
+      var _this = this;
+
       window.axios.put('../../api/specialties/update/' + this.specialtyId, {
         'name': this.name
       }).then(function (res) {
-        console.log('res', res);
+        var message = 'Specialty Sucessfully Updated';
+        var type = 'success';
+
+        _this.showAlert(message, type);
       })["catch"](function (error) {
-        console.log(error.response.data.error);
+        console.log(error);
+        var message = "Could Not Update the Specialty. Check the Form Data";
+        var type = 'danger';
+
+        _this.showAlert(message, type);
       });
       e.preventDefault();
     },
     getSpecialtyDetails: function getSpecialtyDetails() {
-      var _this = this;
+      var _this2 = this;
 
       window.axios.get('../../api/specialties/details/' + this.specialtyId).then(function (res) {
-        _this.name = res.data.name;
+        _this2.name = res.data.name;
       });
+    },
+    showAlert: function showAlert(message, type) {
+      $("#myAlert").html("<div class='alert alert-" + type + " alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> " + message + "</div>");
+      $("#myAlert").css("display", "");
     }
   }
 });
@@ -39655,7 +39735,7 @@ var staticRenderFns = [
             staticClass: "btn btn-outline-primary float-right",
             attrs: { type: "submit" }
           },
-          [_vm._v("Register")]
+          [_vm._v("Save")]
         )
       ])
     ])

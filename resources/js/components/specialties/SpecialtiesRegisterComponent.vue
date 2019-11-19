@@ -55,9 +55,16 @@
                     console.log('res', res);
                 }).catch(error => {
                     console.log(error.response.data.error);
+                    var message = "Could Not Register the Specialty. Check the Form Data";
+                    var type = 'danger';
+                    this.showAlert(message, type);
                 });
                 e.preventDefault();
-            }
+            },
+            showAlert: function(message, type){
+                $("#myAlert").html("<div class='alert alert-"+type+" alert-dismissable' id='myAlert2'> <button type='button' class='close' data-dismiss='alert'  aria-hidden='true'>&times;</button> "+message+"</div>");
+                $("#myAlert").css("display", "");
+            },
         }
     }
 </script>
