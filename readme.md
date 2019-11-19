@@ -23,6 +23,9 @@ e suas especialidades
         composer install
 
     utilize o comando:
+        php artisan key:generate
+
+    utilize o comando:
         php artisan migrate
 
     para criar as tabelas e:
