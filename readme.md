@@ -32,8 +32,3 @@ e suas especialidades
 
     saia da pasta bash e acesse o diretório principal do projeto, utitilize os comandos:
         npm install && npm run watch
-
-
-## Como usar
-
-## Biblioteca Postman
